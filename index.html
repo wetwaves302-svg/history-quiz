@@ -96,12 +96,54 @@ function calculateScore() {
 
     const url = `https://docs.google.com/forms/d/e/${formID}/formResponse?${entryName}=${encodeURIComponent(name)}&${entryScore}=${Math.round(score)}&submit=Submit`;
     
-    fetch(url, { mode: 'no-cors' });
-    
+function calculateScore() {
+    const name = document.getElementById('student-name').value;
+    if (!name) { alert("請輸入姓名！"); return; }
+
+    let score = 0;
+    selectedQuestions.forEach(item => {
+        const correctText = (item.correct === 'a' ? item.a : item.b);
+        if (item.userChoice === correctText) score += 5; // 每題5分
+    });
+
+    // --- 改用「建立虛擬表單」的方式送出，避開瀏覽器擋掉 fetch 的問題 ---
+    const form = document.createElement('form');
+    form.method = 'POST';
+    form.action = `https://docs.google.com/forms/d/e/您的表單ID/formResponse`;
+    form.target = 'hidden_iframe'; // 讓它在隱藏的框框裡送出，頁面才不會跳轉
+
+    // 建立隱藏的姓名欄位
+    const nameInput = document.createElement('input');
+    nameInput.name = 'entry.您的姓名ID';
+    nameInput.value = name;
+    form.appendChild(nameInput);
+
+    // 建立隱藏的分數欄位
+    const scoreInput = document.createElement('input');
+    scoreInput.name = 'entry.您的分數ID';
+    scoreInput.value = score;
+    form.appendChild(scoreInput);
+
+    // 建立一個隱藏的 iframe 用來接收 Google 的回傳畫面
+    if (!document.getElementById('hidden_iframe')) {
+        const iframe = document.createElement('iframe');
+        iframe.id = 'hidden_iframe';
+        iframe.name = 'hidden_iframe';
+        iframe.style.display = 'none';
+        document.body.appendChild(iframe);
+    }
+
+    document.body.appendChild(form);
+    form.submit(); // 正式送出
+    document.body.removeChild(form); // 送完就拆掉
+
+    // 顯示結果畫面給學生看
     document.getElementById('quiz-container').style.display = 'none';
     document.getElementById('result-area').style.display = 'block';
-    document.getElementById('final-score').innerText = Math.round(score);
+    document.getElementById('final-score').innerText = score;
 }
+
+
 </script>
 </body>
 </html>
