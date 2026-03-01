@@ -1,0 +1,44 @@
+{\rtf1\ansi\ansicpg950\cocoartf2867
+\cocoatextscaling0\cocoaplatform0{\fonttbl\f0\fswiss\fcharset0 Helvetica;\f1\fnil\fcharset0 HelveticaNeue;}
+{\colortbl;\red255\green255\blue255;\red24\green24\blue24;\red255\green255\blue255;}
+{\*\expandedcolortbl;;\cssrgb\c12157\c12157\c12157;\cssrgb\c100000\c100000\c100000;}
+\paperw11900\paperh16840\margl1440\margr1440\vieww29200\viewh18460\viewkind0
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
+
+\f0\fs24 \cf0 function calculateScore() \{\
+    const name = document.getElementById('student-name').value;\
+    if (!name) \{ alert("\uc0\u35531 \u36664 \u20837 \u22995 \u21517 \u24460 \u20877 \u20132 \u21367 \u65281 "); return; \}\
+\
+    let score = 0;\
+    selectedQuestions.forEach(item => \{\
+        if (item.userChoice === item.actualCorrect) score += 5;\
+    \});\
+\
+    // --- \uc0\u33258 \u21205 \u22238 \u20659  Google \u34920 \u21934 \u38283 \u22987  ---\
+    // \uc0\u35531 \u26367 \u25563 \u25104 \u20320 \u33258 \u24049 \u30340  Google \u34920 \u21934  ID \u33287  entry ID\
+    const formID = \'931ZwBMDESr90xe-FGF5OeXpGmn-E_D5nWvjSjCh1rCkp0\'94; \
+    const entryName = "entry.
+\f1\fs32 \cf2 \cb3 \expnd0\expndtw0\kerning0
+671057962
+\f0\fs24 \cf0 \cb1 \kerning1\expnd0\expndtw0 "; \
+    const entryScore = "entry.
+\f1\fs32 \cf2 \cb3 \expnd0\expndtw0\kerning0
+1155901214
+\f0\fs24 \cf0 \cb1 \kerning1\expnd0\expndtw0 ";\
+\
+    const uploadUrl = `https://docs.google.com/forms/d/e/$\{formID\}/formResponse?$\{entryName\}=$\{encodeURIComponent(name)\}&$\{entryScore\}=$\{score\}&submit=Submit`;\
+\
+    // \uc0\u20351 \u29992 \u32972 \u26223 \u30332 \u36865 \u65292 \u23416 \u29983 \u19981 \u26371 \u36339 \u36681 \u38913 \u38754 \
+    fetch(uploadUrl, \{ mode: 'no-cors' \})\
+        .then(() => \{\
+            console.log("\uc0\u20998 \u25976 \u24050 \u25104 \u21151 \u22238 \u20659 ");\
+        \})\
+        .catch(err => console.error("\uc0\u22238 \u20659 \u22833 \u25943 ", err));\
+    // --- \uc0\u33258 \u21205 \u22238 \u20659 \u32080 \u26463  ---\
+\
+    document.getElementById('quiz-container').style.display = 'none';\
+    document.getElementById('result-area').style.display = 'block';\
+    document.getElementById('final-score').innerText = score;\
+\}\
+\
+}
